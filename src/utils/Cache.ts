@@ -14,7 +14,7 @@ class Cache implements CacheInterface {
 
     constructor() {
         // @ts-ignore
-        this.cacheClient = redis.createClient(null, null, { "url": process.env.REDIS_URL });
+        this.cacheClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
     }
 
     sadd(key: string, values: Array<string>, timeExpiration: number) {

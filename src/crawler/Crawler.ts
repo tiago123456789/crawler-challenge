@@ -3,6 +3,7 @@ import axios from "axios";
 import cheerio from "cheerio";
 import { CacheInterface } from "../utils/Cache";
 import { Logger } from "winston";
+import { App } from "../constants/App"
 const agents = require("./../../agents.json")
 
 
@@ -11,10 +12,6 @@ export interface CrawlerInterface {
 } 
 
 export default class Crawler implements CrawlerInterface {
-
-    private readonly URL = "https://www.netshoes.com.br/tenis-nike-air-max-impact-2-preto+branco-HZM-4286-026";
-    private readonly KEY_CACHE = "tenis-nike-air-max-impact-2-preto+branco-HZM-4286-026";
-    private readonly TIME_EXPIRATION_CACHE_IN_SECONDS = (22600 * 1000)
 
     constructor(private readonly cache: CacheInterface, private readonly logger: Logger) { }
 
@@ -30,7 +27,7 @@ export default class Crawler implements CrawlerInterface {
             const data: { [key: string]: any } = {}
 
             // @ts-ignore
-            const { data: html } = await axios.get(this.URL);
+            const { data: html } = await axios.get(App.URL);
 
             const $ = cheerio.load(html);
             data.title = $(".short-description > h1").text();
@@ -44,13 +41,17 @@ export default class Crawler implements CrawlerInterface {
             const browser = await puppeteer.launch({
                 headless: true,
                 args: [
+                    "--disable-gpu",
+                    "--disable-dev-shm-usage",
+                    "--disable-setuid-sandbox",
+                    "--no-sandbox",
                     "--disable-notifications"
                 ]
             }); 
             const page = await browser.newPage();
             await page.setUserAgent(this.getUserAgent())
-            await page.goto(this.URL, { waitUntil: 'networkidle2' });
-            await page.$eval(".product-size-selector .radio-options > li:nth-child(2) > a", (li: any) => li.click());
+            await page.goto(App.URL, { waitUntil: 'networkidle2' });
+            await page.$eval(".product-size-selector .radio-options > li:nth-child(1) > a", (li: any) => li.click());
             await Promise.all([
                 page.$eval("#buy-button-now", (li: any) => li.click()),
                 page.waitForNavigation({ waitUntil: 'networkidle0' }),
@@ -68,9 +69,10 @@ export default class Crawler implements CrawlerInterface {
 
             await browser.close();
             this.logger.info("Storing data in cache")
-            await this.cache.set(this.KEY_CACHE, JSON.stringify(data), this.TIME_EXPIRATION_CACHE_IN_SECONDS);
+            await this.cache.set(App.KEY_CACHE, JSON.stringify(data), App.TIME_EXPIRATION_CACHE_IN_SECONDS);
             return data;
         } catch (error) {
+            console.log(error)
             this.logger.error(error);
         }
     }

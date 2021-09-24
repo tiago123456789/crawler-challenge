@@ -2,8 +2,54 @@ version: "3"
 
 services:
 
+  web_app:
+    build:
+      context: ./
+      dockerfile: DockerfileWebapp
+    restart: always
+    env_file: 
+      - .env
+    ports:
+      - 3001:3001
+    command: >
+      sh -c "
+          npm run start
+        "
+    container_name: web_app
+    volumes:
+      - ./:/app/
+    depends_on: 
+      - redis
+    networks:
+      - app-network
+
+  job:
+    build: 
+      context: ./
+      dockerfile: DockerfileCrawler
+    restart: always
+    env_file: 
+      - .env
+    command: >
+      sh -c "
+          npm run jobs
+        "
+    container_name: crawler_netshoes_job
+    volumes:
+      - ./:/app/
+    depends_on: 
+      - redis
+    networks:
+      - app-network
+
   redis:
     image: redis
     ports:
       - 6379:6379
     container_name: cache
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
