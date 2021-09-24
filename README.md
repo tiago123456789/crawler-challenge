@@ -19,7 +19,7 @@ Detalhes sobre o funcionamento do crawler:
 - Para extrair os dados title, image, price é usando axios para fazer um requisição http, pois como não precisa interar com a página fica muito mais rápido para extrair os dados do que usar o **puppeteer**
 - Depois é usando o **puppeteer** para aplicar o cupom é pegar o valor do produto depois de aplicar o cupom. 
 - Após pegar o valor é armazenado no redis que foi usando com banco de dados aqui para o teste, mas em produção o correto é armazenar em um banco de dados que escreve em disco.
-- O crawler é um processo a parte onde extrai os dados é armazena os dados no redis depois a api vai pegar os dados armazenados no redis. O que me motivou a fazer dessa forma foi porque se o crawler extrair os dados no momento que e feita a requisição para rota isso não seria performático é não gerar um boa experiência para usuário que vai usar a aplicação. 
+- O crawler é um processo a parte onde extrai os dados é armazena os dados no redis depois a api vai pegar os dados armazenados no redis. O que me motivou a fazer dessa forma foi porque se o crawler extrair os dados no momento que e feita a requisição para rota isso não seria performático é não gera um boa experiência para usuário que vai usar a aplicação. 
 
 
 Aspectos aplicados no crawler para evitar ser bloqueado:
