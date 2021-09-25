@@ -41,7 +41,8 @@ WORKDIR ./app/
 
 COPY . ./
 
-RUN npm i 
+RUN npm i
+
 RUN chmod -R o+rwx node_modules/puppeteer/.local-chromium
 
 

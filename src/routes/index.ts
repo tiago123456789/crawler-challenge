@@ -9,7 +9,7 @@ export default (app: Express) => {
         let extractedProduct = await cache.get(App.KEY_CACHE)
         if (!extractedProduct) {
             return response.json({
-                "message": "Data the product not available yet"
+                "message": "Data the product not available yet. Try 2 minutos later, please."
             })
         }
         // @ts-ignore

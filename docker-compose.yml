@@ -17,7 +17,7 @@ services:
         "
     container_name: web_app
     volumes:
-      - ./:/app/
+      - ./logs:/app/logs/
     depends_on: 
       - redis
     networks:
@@ -36,7 +36,7 @@ services:
         "
     container_name: crawler_netshoes_job
     volumes:
-      - ./:/app/
+      - ./logs:/app/logs/
     depends_on: 
       - redis
     networks:
