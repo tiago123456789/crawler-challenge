@@ -37,5 +37,5 @@ Instruções para rodar o projeto:
 
 - Clonar projeto
 - Criar arquivo **.env** baseado no arquivo **.env.example** 
-- Depois executa o comando: **docker-compose up -d** esse comando irá criar um container para redis(banco de dados que armazena os dados), um para rodar um job que executa o crawler a cada 6 horas e um container que cria um api simples para expor os dados extraídos.
+- Depois executa o comando: **docker-compose up** esse comando irá criar um container para redis(banco de dados que armazena os dados), um para rodar um job que executa o crawler a cada 6 horas e um container que cria um api simples para expor os dados extraídos.
 - Após o comando acima finalizar acesso o navegador no endereço: http://localhost:3001/extracted-products caso não retorne os dados é por que o crawler está extraíndo é depois de um tempo faça um requisição para acessar os dados extraídos.
